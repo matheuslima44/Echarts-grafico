@@ -8,7 +8,6 @@ import {
   UserCard,
 } from "./styles";
 
-// Defina um tipo para o usuário
 interface User {
   nome: string;
   id: string;
@@ -43,15 +42,14 @@ export function ColetaApp() {
       const options = {
         xAxis: {
           type: "category",
-          data: updatedColetas, // Atualize as coletas
+          data: updatedColetas, // Atualize os dados do eixo X com as coletas atualizadas
         },
         series: [
           {
-            data: updatedColetas.map((coleta) => parseInt(coleta)), 
+            data: updatedColetas.map((coleta) => parseInt(coleta)), // Atualize os dados da série com as coletas atualizadas
             type: "line",
           },
         ],
-        
       };
       setOptions(options); // Atualize as opções do gráfico
     }
@@ -72,14 +70,16 @@ export function ColetaApp() {
     setUserInfos(updatedUserInfos);
     setNovaColeta("");
 
+    // Atualize a série de dados do gráfico com as coletas atualizadas
     const allColetas = updatedUserInfos.flatMap((user) => user.coletas);
     const options = {
       xAxis: {
         type: "category",
-        data: allColetas, // Atualize as Coletas no eixo X 
+        data: allColetas, // Atualize os dados do eixo X com todas as coletas
+      },
       series: [
         {
-          data: allColetas.map((coleta) => parseInt(coleta)), // Atualize os dados das coletas
+          data: allColetas.map((coleta) => parseInt(coleta)), // Atualize os dados da série com todas as coletas
           type: "line",
         },
       ],
@@ -93,8 +93,6 @@ export function ColetaApp() {
   ) => {
     const updatedUserInfos = [...userInfos];
     const userToUpdate = updatedUserInfos[userId];
-
-    //Filtrar os dados da coleta
 
     userToUpdate.coletas = userToUpdate.coletas.filter(
       (coleta) => coleta !== coletaToDelete
