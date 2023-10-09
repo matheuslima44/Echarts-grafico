@@ -43,15 +43,15 @@ export function ColetaApp() {
       const options = {
         xAxis: {
           type: "category",
-          data: updatedColetas, // Atualize os dados do eixo X com as coletas atualizadas
+          data: updatedColetas, // Atualize as coletas
         },
         series: [
           {
-            data: updatedColetas.map((coleta) => parseInt(coleta)), // Atualize os dados da série com as coletas atualizadas
+            data: updatedColetas.map((coleta) => parseInt(coleta)), 
             type: "line",
           },
         ],
-        // ... Outras configurações do gráfico ...
+        
       };
       setOptions(options); // Atualize as opções do gráfico
     }
@@ -72,20 +72,17 @@ export function ColetaApp() {
     setUserInfos(updatedUserInfos);
     setNovaColeta("");
 
-    // Atualize a série de dados do gráfico com as coletas atualizadas
     const allColetas = updatedUserInfos.flatMap((user) => user.coletas);
     const options = {
       xAxis: {
         type: "category",
-        data: allColetas, // Atualize os dados do eixo X com todas as coletas
-      },
+        data: allColetas, // Atualize as Coletas no eixo X 
       series: [
         {
-          data: allColetas.map((coleta) => parseInt(coleta)), // Atualize os dados da série com todas as coletas
+          data: allColetas.map((coleta) => parseInt(coleta)), // Atualize os dados das coletas
           type: "line",
         },
       ],
-      // ... Outras configurações do gráfico ...
     };
     setOptions(options); // Atualize as opções do gráfico
   };
@@ -97,14 +94,14 @@ export function ColetaApp() {
     const updatedUserInfos = [...userInfos];
     const userToUpdate = updatedUserInfos[userId];
 
-    // Filter out the coletaToDelete from the user's coletas array
+    //Filtrar os dados da coleta
+
     userToUpdate.coletas = userToUpdate.coletas.filter(
       (coleta) => coleta !== coletaToDelete
     );
 
     setUserInfos(updatedUserInfos);
 
-    // Update the chart with the updated coletas
     const allColetas = updatedUserInfos.flatMap((user) => user.coletas);
     const options = {
       xAxis: {
@@ -117,16 +114,15 @@ export function ColetaApp() {
           type: "line",
         },
       ],
-      // ... Other chart configurations ...
     };
     setOptions(options);
   };
 
   const handleExpandEquipment = (equipmentName: string) => {
     if (expandedEquipment === equipmentName) {
-      setExpandedEquipment(null); // Contraia se já estiver expandido
+      setExpandedEquipment(null); // Ao clicar no nome expandir
     } else {
-      setExpandedEquipment(equipmentName); // Expanda se não estiver expandido
+      setExpandedEquipment(equipmentName); // se não estiver expandido, expandir
     }
   };
 
@@ -179,10 +175,9 @@ export function ColetaApp() {
                   <p>ID: {userInfo.id}</p>
                   <h4>Coletas</h4>
                   <ul>
-                    {/* Map over coletas and display them */}
                     {userInfo.coletas.map((coleta, coletaIndex) => (
                       <li key={coletaIndex}>
-                        {coleta} {/* Display the coleta value */}
+                        {coleta}
                         <button
                           onClick={() =>
                             handleRemoverColetaUsuario(index, coleta)
