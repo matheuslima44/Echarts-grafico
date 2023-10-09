@@ -73,7 +73,6 @@ export function ColetaApp() {
   return (
     <Container>
       <Sidebar>
-        <h2>Adicionar Equipamento</h2>
         <input
           type="text"
           placeholder="Nome"
@@ -86,37 +85,37 @@ export function ColetaApp() {
           value={id}
           onChange={(e) => setId(e.target.value)}
         />
-        <button onClick={handleAdicionarPessoa}>Adicionar Pessoa</button>
+        <button onClick={handleAdicionarPessoa}>Adicionar Equipamento</button>
+        <UserInfo>
+          <h2>Equipamentos Adicionados</h2>
+          {userInfos.map((userInfo, index) => (
+            <UserCard key={index}>
+              <p>{userInfo.nome}</p>
+              <p>ID: {userInfo.id}</p>
+              <h4>Coletas</h4>
+              <ul>
+                {userInfo.coletas.map((coleta, coletaIndex) => (
+                  <li key={coletaIndex}>{coleta}</li>
+                ))}
+              </ul>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Adicionar Coleta"
+                  value={novaColeta}
+                  onChange={(e) => setNovaColeta(e.target.value)}
+                />
+                <button onClick={() => handleAdicionarColetaUsuario(index)}>
+                  Adicionar Coleta
+                </button>
+              </div>
+            </UserCard>
+          ))}
+        </UserInfo>
       </Sidebar>
       <GraphicsContainer>
         <ReactECharts option={options} />
       </GraphicsContainer>
-      <UserInfo>
-        <h2>Equipamentos Adicionados</h2>
-        {userInfos.map((userInfo, index) => (
-          <UserCard key={index}>
-            <p>{userInfo.nome}</p>
-            <p>ID: {userInfo.id}</p>
-            <h4>Coletas</h4>
-            <ul>
-              {userInfo.coletas.map((coleta, coletaIndex) => (
-                <li key={coletaIndex}>{coleta}</li>
-              ))}
-            </ul>
-            <div>
-              <input
-                type="text"
-                placeholder="Adicionar Coleta"
-                value={novaColeta}
-                onChange={(e) => setNovaColeta(e.target.value)}
-              />
-              <button onClick={() => handleAdicionarColetaUsuario(index)}>
-                Adicionar Coleta
-              </button>
-            </div>
-          </UserCard>
-        ))}
-      </UserInfo>
     </Container>
   );
 }
