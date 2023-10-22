@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import {
   Container,
@@ -37,21 +37,7 @@ export function ColetaApp() {
       };
       setColetas([...coletas, newColeta]);
       setNovaColeta("");
-
-      // Atualize a série de dados do gráfico com as coletas atualizadas
-      const options = {
-        xAxis: {
-          type: "category",
-          data: updatedColetas, // Atualize os dados do eixo X com as coletas atualizadas
-        },
-        series: [
-          {
-            data: updatedColetas.map((coleta) => parseInt(coleta)), // Atualize os dados da série com as coletas atualizadas
-            type: "line",
-          },
-        ],
-      };
-      setOptions(options); // Atualize as opções do gráfico
+      updateChartOptions();
     }
   };
 
@@ -65,26 +51,17 @@ export function ColetaApp() {
   };
 
   const handleAdicionarColetaUsuario = (userId: number) => {
-    const updatedUserInfos = [...userInfos];
-    updatedUserInfos[userId].coletas.push(novaColeta);
-    setUserInfos(updatedUserInfos);
-    setNovaColeta("");
-
-    // Atualize a série de dados do gráfico com as coletas atualizadas
-    const allColetas = updatedUserInfos.flatMap((user) => user.coletas);
-    const options = {
-      xAxis: {
-        type: "category",
-        data: allColetas, // Atualize os dados do eixo X com todas as coletas
-      },
-      series: [
-        {
-          data: allColetas.map((coleta) => parseInt(coleta)), // Atualize os dados da série com todas as coletas
-          type: "line",
-        },
-      ],
-    };
-    setOptions(options); // Atualize as opções do gráfico
+    if (novaColeta !== "") {
+      const updatedUserInfos = [...userInfos];
+      const newColeta: Coleta = {
+        id: Date.now().toString(),
+        value: novaColeta,
+      };
+      updatedUserInfos[userId].coletas.push(newColeta);
+      setUserInfos(updatedUserInfos);
+      setNovaColeta("");
+      updateChartOptions();
+    }
   };
 
   const handleRemoverColetaUsuario = (
@@ -93,55 +70,70 @@ export function ColetaApp() {
   ) => {
     const updatedUserInfos = [...userInfos];
     const userToUpdate = updatedUserInfos[userId];
-
     userToUpdate.coletas = userToUpdate.coletas.filter(
-      (coleta) => coleta !== coletaToDelete
+      (coleta) => coleta.id !== coletaToDelete
     );
-
     setUserInfos(updatedUserInfos);
-
-    const allColetas = updatedUserInfos.flatMap((user) => user.coletas);
-    const options = {
-      xAxis: {
-        type: "category",
-        data: allColetas,
-      },
-      series: [
-        {
-          data: allColetas.map((coleta) => parseInt(coleta)),
-          type: "line",
-        },
-      ],
-    };
-    setOptions(options);
+    updateChartOptions();
   };
 
   const handleExpandEquipment = (equipmentName: string) => {
     if (expandedEquipment === equipmentName) {
-      setExpandedEquipment(null); // Ao clicar no nome expandir
+      setExpandedEquipment(null);
     } else {
-      setExpandedEquipment(equipmentName); // se não estiver expandido, expandir
+      setExpandedEquipment(equipmentName);
     }
   };
 
-  const [options, setOptions] = useState({
-    title: {
-      text: "Gráfico de Coletas",
-    },
-    xAxis: {
-      type: "category",
-      data: coletas,
-    },
-    yAxis: {
-      type: "value",
-    },
-    series: [
-      {
-        data: coletas.map((coleta) => parseInt(coleta)),
-        type: "line",
-      },
-    ],
-  });
+  const updateChartOptions = () => {
+    const updatedOptions: { [key: string]: any } = {};
+    userInfos.forEach((userInfo) => {
+      updatedOptions[userInfo.id] = {
+        title: {
+          text: `Gráfico de Coletas - ID: ${userInfo.id}`,
+        },
+        xAxis: {
+          type: "category",
+          data: userInfo.coletas.map((coleta) => coleta.value),
+        },
+        yAxis: {
+          type: "value",
+        },
+        series: [
+          {
+            data: userInfo.coletas.map((coleta) => parseInt(coleta.value)),
+            type: "line",
+          },
+        ],
+      };
+    });
+    setOptions(updatedOptions);
+  };
+
+  const chartOptions = useMemo(() => {
+    const options: { [key: string]: any } = {};
+    userInfos.forEach((userInfo) => {
+      options[userInfo.id] = {
+        title: {
+          text: `Gráfico de Coletas - ID: ${userInfo.id}`,
+        },
+        xAxis: {
+          type: "category",
+          data: userInfo.coletas.map((coleta) => coleta.value),
+        },
+        yAxis: {
+          type: "value",
+        },
+        series: [
+          {
+            data: userInfo.coletas.map((coleta) => parseInt(coleta.value)),
+            type: "line",
+          },
+        ],
+      };
+    });
+    return options;
+  }, [userInfos]);
 
   return (
     <Container>
@@ -175,10 +167,10 @@ export function ColetaApp() {
                   <ul>
                     {userInfo.coletas.map((coleta, coletaIndex) => (
                       <li key={coletaIndex}>
-                        {coleta}
+                        {coleta.value}
                         <button
                           onClick={() =>
-                            handleRemoverColetaUsuario(index, coleta)
+                            handleRemoverColetaUsuario(index, coleta.id)
                           }
                         >
                           Delete
@@ -204,7 +196,12 @@ export function ColetaApp() {
         </UserInfo>
       </Sidebar>
       <GraphicsContainer>
-        <ReactECharts option={options} />
+        {userInfos.map((userInfo, index) => (
+          <div key={index}>
+            <h2>Equipamento ID: {userInfo.id}</h2>
+            <ReactECharts option={chartOptions[userInfo.id]} />
+          </div>
+        ))}
       </GraphicsContainer>
     </Container>
   );
