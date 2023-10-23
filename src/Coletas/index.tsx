@@ -40,6 +40,7 @@ export function ColetaApp() {
       updateChartOptions();
     }
   };
+  console.log(handleAdicionarColeta);
 
   const handleAdicionarPessoa = () => {
     if (nome !== "" && id !== "") {
