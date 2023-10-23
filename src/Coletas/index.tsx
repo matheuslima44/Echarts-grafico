@@ -28,6 +28,7 @@ export function ColetaApp() {
   const [expandedEquipment, setExpandedEquipment] = useState<string | null>(
     null
   );
+  const [chartType, setChartType] = useState("line");
 
   const handleAdicionarColeta = () => {
     if (novaColeta !== "") {
@@ -111,10 +112,13 @@ export function ColetaApp() {
     setOptions(updatedOptions);
   };
 
+  const toggleChartType = () => {
+    setChartType(chartType === "line" ? "bar" : "line");
+  };
+
   const chartOptions = useMemo(() => {
     const options: { [key: string]: any } = {};
     userInfos.forEach((userInfo) => {
-      //usado para alterar o array no final do loop
       options[userInfo.id] = {
         title: {
           text: `Gráfico de Coletas - ID: ${userInfo.id}`,
@@ -129,13 +133,13 @@ export function ColetaApp() {
         series: [
           {
             data: userInfo.coletas.map((coleta) => parseInt(coleta.value)),
-            type: "line",
+            type: chartType,
           },
         ],
       };
     });
     return options;
-  }, [userInfos]);
+  }, [userInfos, chartType]);
 
   return (
     <Container>
@@ -194,6 +198,9 @@ export function ColetaApp() {
             </UserCard>
           ))}
         </UserInfo>
+        <button onClick={toggleChartType}>
+          Line || Bar ({chartType === "line" ? "Bar" : "Line"})
+        </button>
       </Sidebar>
       <GraphicsContainer>
         {userInfos.map((userInfo, index) => (
