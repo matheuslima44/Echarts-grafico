@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import {
   Container,
@@ -113,6 +113,7 @@ export function ColetaApp() {
   const chartOptions = useMemo(() => {
     const options: { [key: string]: any } = {};
     userInfos.forEach((userInfo) => {
+      //usado para alterar o array no final do loop
       options[userInfo.id] = {
         title: {
           text: `Gráfico de Coletas - ID: ${userInfo.id}`,
