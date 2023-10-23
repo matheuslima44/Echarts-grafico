@@ -198,7 +198,10 @@ export function ColetaApp() {
       <GraphicsContainer>
         {userInfos.map((userInfo, index) => (
           <div key={index}>
-            <ReactECharts option={chartOptions[userInfo.id]} />
+            {expandedEquipment === userInfo.nome && (
+              <ReactECharts option={chartOptions[userInfo.id]} />
+            )}
+            {/* Expandir Grafico por id */}
           </div>
         ))}
       </GraphicsContainer>
