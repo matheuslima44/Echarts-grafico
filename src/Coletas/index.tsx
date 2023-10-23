@@ -53,7 +53,7 @@ export function ColetaApp() {
   };
 
   const handleAdicionarColetaUsuario = (userId: number) => {
-    if (/^[0-9]+$/.test(novaColeta)) {
+    if (/[0-9]+$/.test(novaColeta)) {
       const updatedUserInfos = [...userInfos];
       const newColeta: Coleta = {
         id: Date.now().toString(),
