@@ -54,6 +54,7 @@ export function ColetaApp() {
 
   const handleAdicionarColetaUsuario = (userId: number) => {
     if (/[0-9]+$/.test(novaColeta)) {
+      //test, é utilizado para testar as strings, até achar um erro.
       const updatedUserInfos = [...userInfos];
       const newColeta: Coleta = {
         id: Date.now().toString(),
