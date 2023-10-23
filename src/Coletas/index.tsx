@@ -53,7 +53,7 @@ export function ColetaApp() {
   };
 
   const handleAdicionarColetaUsuario = (userId: number) => {
-    if (novaColeta !== "") {
+    if (/^[0-9]+$/.test(novaColeta)) {
       const updatedUserInfos = [...userInfos];
       const newColeta: Coleta = {
         id: Date.now().toString(),
@@ -63,6 +63,8 @@ export function ColetaApp() {
       setUserInfos(updatedUserInfos);
       setNovaColeta("");
       updateChartOptions();
+    } else {
+      alert("Digite Apenas numeros");
     }
   };
 
