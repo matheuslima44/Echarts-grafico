@@ -38,7 +38,6 @@ export function ColetaApp() {
       };
       setColetas([...coletas, newColeta]);
       setNovaColeta("");
-      updateChartOptions();
     }
   };
   console.log(handleAdicionarColeta);
@@ -63,7 +62,6 @@ export function ColetaApp() {
       updatedUserInfos[userId].coletas.push(newColeta);
       setUserInfos(updatedUserInfos);
       setNovaColeta("");
-      updateChartOptions();
     } else {
       alert("Digite Apenas numeros");
     }
@@ -79,7 +77,6 @@ export function ColetaApp() {
       (coleta) => coleta.id !== coletaToDelete
     );
     setUserInfos(updatedUserInfos);
-    updateChartOptions();
   };
 
   const handleExpandEquipment = (equipmentName: string) => {
@@ -88,31 +85,6 @@ export function ColetaApp() {
     } else {
       setExpandedEquipment(equipmentName);
     }
-  };
-
-  const updateChartOptions = () => {
-    const updatedOptions: { [key: string]: any } = {};
-    userInfos.forEach((userInfo) => {
-      updatedOptions[userInfo.id] = {
-        title: {
-          text: `Gráfico de Coletas - ID: ${userInfo.id}`,
-        },
-        xAxis: {
-          type: "category",
-          data: userInfo.coletas.map((coleta) => coleta.value),
-        },
-        yAxis: {
-          type: "value",
-        },
-        series: [
-          {
-            data: userInfo.coletas.map((coleta) => parseInt(coleta.value)),
-            type: "line",
-          },
-        ],
-      };
-    });
-    setOptions(updatedOptions);
   };
 
   const toggleChartType = () => {
