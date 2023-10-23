@@ -154,7 +154,7 @@ export function ColetaApp() {
         />
         <button onClick={handleAdicionarPessoa}>Adicionar Equipamento</button>
         <UserInfo>
-          <h2>Equipamentos Adicionados</h2>
+          <h3>Equipamentos Adicionados:</h3>
           {userInfos.map((userInfo, index) => (
             <UserCard key={index}>
               <p>
@@ -164,8 +164,6 @@ export function ColetaApp() {
               </p>
               {expandedEquipment === userInfo.nome && (
                 <div>
-                  <p>ID: {userInfo.id}</p>
-                  <h4>Coletas</h4>
                   <ul>
                     {userInfo.coletas.map((coleta, coletaIndex) => (
                       <li key={coletaIndex}>
@@ -200,7 +198,6 @@ export function ColetaApp() {
       <GraphicsContainer>
         {userInfos.map((userInfo, index) => (
           <div key={index}>
-            <h2>Equipamento ID: {userInfo.id}</h2>
             <ReactECharts option={chartOptions[userInfo.id]} />
           </div>
         ))}
